@@ -13,29 +13,21 @@ export default  class Main extends Component {
         users: null,
         errorMsg: null
     }
-
-    // 当组件接受到新的属性时回调
-    componentWillReceiveProps(newProps) { //指定了新的searchName。需要请求
+    componentWillReceiveProps(newProps) { 
         const {searchName} =newProps
-        // 更新状态（请求中）
         this.setState({
             initView: false,
             loading:true
         })
-            // 发axios请求
         const url = `https://api.github.com/search/users?q=${searchName}`
         axios.get(url)
             .then(response => {
-                //得到响应数据
                 const result = response.data
                 console.log(result)
                 const users = result.items.map(item => ({name:item.login, url:item.html_url, avatarUrl: item.avatar_url}))
-
-                // 更新状态（成功）
                 this.setState({loading:false,users})
             })
             .catch(error => {
-                //更新状态（失败）
                 this.setState({loading:false, errorMsg:error.message})
 
             })
